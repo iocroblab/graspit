@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Virtual Grasp</string>
   </property>
-  <widget class="Q3GroupBox" name="graspQualityAnalysisGroupBox">
+  <widget class="QGroupBox" name="graspQualityAnalysisGroupBox">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -255,14 +255,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <includes>
   <include location="global">vector</include>
  </includes>
@@ -273,22 +265,6 @@
    <signal>clicked()</signal>
    <receiver>ContactExaminerDlgUI</receiver>
    <slot>exitButton_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>updateQualityButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ContactExaminerDlgUI</receiver>
-   <slot>updateQualityButton_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>

@@ -130,7 +130,7 @@ GraspitCollision::activatePair(const Body *body1, const Body *body2, bool active
     std::swap(model1, model2);
   }
   if (!active) {
-    DBGP("Disable pair: " << getBody(model1)->getName().latin1() << " -- " << getBody(model2)->getName().latin1());
+    DBGP("Disable pair: " << getBody(model1)->getName().toUtf8().constData() << " -- " << getBody(model2)->getName().toUtf8().constData());
     mDisabledMap.insert(std::pair<const CollisionModel *, const CollisionModel *>(model1, model2));
   } else {
     //remove from list
@@ -391,7 +391,7 @@ GraspitCollision::allContacts(CollisionReport *report, double threshold,
       report->back().contacts = cc.getReport();
 
       //remove duplicates from the contact report
-      DBGP("Bodies: " << getBody(it->first)->getName().latin1() << " -- " << getBody(it->second)->getName().latin1());
+      DBGP("Bodies: " << getBody(it->first)->getName().toUtf8().constData() << " -- " << getBody(it->second)->getName().toUtf8().constData());
       DBGP("Before duplicate removal: " << report->back().contacts.size());
       removeContactDuplicates(&(report->back().contacts), CONTACT_DUPLICATE_THRESHOLD);
       DBGP("After duplicate removal: " << report->back().contacts.size());

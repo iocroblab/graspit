@@ -192,7 +192,7 @@ void SoftContact::FitPoints()
   c = coeffs[2];
 
   RotateParaboloid(coeffs, &r1, &r2, &fitRot, &fitRotAngle);
-  DBGP(getBody1()->getName().latin1() << ": " << "a=" << a << " b=" << b << " c=" << c);
+  DBGP(getBody1()->getName().toUtf8().constData() << ": " << "a=" << a << " b=" << b << " c=" << c);
   DBGP("r1=" << r1 << " r2=" << r2);
 }
 
@@ -240,7 +240,7 @@ int SoftContact::CalcRprimes()
 
   CalcRelPhi();
 
-  DBGP("Body 1" << getBody1()->getName().latin1() << " Body 2 " << m->getBody1()->getName().latin1());
+  DBGP("Body 1" << getBody1()->getName().toUtf8().constData() << " Body 2 " << m->getBody1()->getName().toUtf8().constData());
 
   //the less than zero curvature is for flat objects
   //1/r goes to zero for flat objects because the curvature

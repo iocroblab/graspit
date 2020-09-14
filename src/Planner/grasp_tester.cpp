@@ -34,7 +34,7 @@
  \brief Implements the grasp_tester class (part of grasp planner)
 */
 
-#include <qstring.h>
+#include <QString>
 
 /* inventor includes */
 #include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
@@ -159,7 +159,7 @@ grasp_tester::saveGraspsToFile(const QString &filename, bool append)
 {
   if (saveToFile) { graspFile.close(); }
 
-  graspFile.setName(filename);
+  graspFile.setFileName(filename);
   if (append) {
     if (graspFile.open(QIODevice::WriteOnly | QIODevice::Append)) {
       graspOut.setDevice(&graspFile);

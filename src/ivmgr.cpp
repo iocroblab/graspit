@@ -35,7 +35,6 @@
 #include <stdexcept>
 #include <typeinfo>
 
-#include <q3listbox.h>
 #include <QApplication>
 #include <QThread>
 #include <QGLWidget>
@@ -218,8 +217,8 @@ IVmgr *IVmgr::ivmgr = 0;
   for draggers and wireframe models, which indicate when bodies are selected,
   are also created.
 */
-IVmgr::IVmgr(World *w, QWidget *parent, const char *name, Qt::WFlags f) :
-  QWidget(parent, name, f)
+IVmgr::IVmgr(World *w, QWidget *parent, const char *name, Qt::WindowFlags f) :
+  QWidget(parent, f)
 {
   ivmgr = this;
   camerafp = NULL;
@@ -1356,7 +1355,7 @@ IVmgr::handleSelection(SoPath *p)
       for (b = 0; b < world->getNumBodies(); b++) {
         if (p->getTail() == world->getBody(b)->getIVRoot()) {
           //#ifdef GRASPITDBG
-          printf("body %s selected\n", world->getBody(b)->getName().latin1());
+          printf("body %s selected\n", world->getBody(b)->getName().toUtf8().constData());
           //#endif
           selectionFound = true;
           if (currTool == ROTATE_TOOL) {
@@ -1433,7 +1432,7 @@ IVmgr::handleDeselection(SoPath *p)
 
   for (b = 0; b < world->getNumBodies() && !deselectedElement; b++)
     if (p->getTail() == world->getBody(b)->getIVRoot()) {
-      DBGP("deselecting body " << world->getBody(b)->getName().latin1());
+      DBGP("deselecting body " << world->getBody(b)->getName().toUtf8().constData());
       deselectedElement = world->getBody(b);
     }
 

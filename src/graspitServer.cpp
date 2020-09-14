@@ -60,11 +60,11 @@ ClientSocket::~ClientSocket()
 int
 ClientSocket::readBodyIndList(std::vector<Body *> &bodyVec)
 {
-  QTextStream os(this);
+  Q3TextStream os(this);
   int i, numBodies, bodNum;
   bool ok;
   World *world = graspitCore->getWorld();
-  std::cout << "ReadBodyIndList Line:" << line.latin1() << std::endl;
+  std::cout << "ReadBodyIndList Line:" << line.toUtf8().constData() << std::endl;
 
   /* if the index list is empty, use every body and send
      back the count
@@ -120,11 +120,11 @@ ClientSocket::readBodyIndList(std::vector<Body *> &bodyVec)
 int
 ClientSocket::readRobotIndList(std::vector<Robot *> &robVec)
 {
-  QTextStream os(this);
+  Q3TextStream os(this);
   int i, robNum, numRobots;
   bool ok;
   World *world = graspitCore->getWorld();
-  std::cout << "ReadRobotIndList Line:" << line.latin1() << std::endl;
+  std::cout << "ReadRobotIndList Line:" << line.toUtf8().constData() << std::endl;
 
   /* if the index list is empty, use every robot and send
      back the count
@@ -310,7 +310,7 @@ ClientSocket::readClient()
 void
 ClientSocket::sendAverageContacts(Body *bod)
 {
-  QTextStream os(this);
+  Q3TextStream os(this);
   std::list<Contact *> contactList;
   std::list<Contact *>::iterator cp;
   int i, numContacts;
@@ -344,9 +344,9 @@ ClientSocket::sendAverageContacts(Body *bod)
 void
 ClientSocket::sendBodyName(Body *bod)
 {
-  QTextStream os(this);
-  std::cout << "sending " << bod->getName().latin1() << "\n";
-  os << bod->getName().latin1() << "\n";
+  Q3TextStream os(this);
+  std::cout << "sending " << bod->getName().toUtf8().constData() << "\n";
+  os << bod->getName().toUtf8().constData() << "\n";
 }
 
 /*!
@@ -356,9 +356,9 @@ ClientSocket::sendBodyName(Body *bod)
 void
 ClientSocket::sendRobotName(Robot *rob)
 {
-  QTextStream os(this);
-  std::cout << "sending " << rob->getName().latin1() << "\n";
-  os << rob->getName().latin1() << "\n";
+  Q3TextStream os(this);
+  std::cout << "sending " << rob->getName().toUtf8().constData() << "\n";
+  os << rob->getName().toUtf8().constData() << "\n";
 }
 
 /*!
@@ -372,7 +372,7 @@ ClientSocket::sendRobotName(Robot *rob)
 void
 ClientSocket::sendContacts(Body *bod, int numData)
 {
-  QTextStream os(this);
+  Q3TextStream os(this);
   std::list<Contact *> contactList;
   std::list<Contact *>::iterator cp;
   vec3 loc;
@@ -410,7 +410,7 @@ ClientSocket::sendContacts(Body *bod, int numData)
 void
 ClientSocket::sendDOFVals(Robot *rob)
 {
-  QTextStream os(this);
+  Q3TextStream os(this);
   int i;
 
   os << rob->getNumDOF() << "\n";
@@ -432,7 +432,7 @@ ClientSocket::readDOFVals()
 {
   Robot *rob;
   double *val, *stepby;
-  QTextStream os(this);
+  Q3TextStream os(this);
   int numDOF, i, robNum;
   bool ok = TRUE;
 
@@ -531,7 +531,7 @@ ClientSocket::readDOFForces(Robot *rob)
   double val;
   bool ok;
   // QTextStream is(this);
-  QTextStream os(this);
+  Q3TextStream os(this);
   int numDOF, i;
 
   if (strPtr == lineStrList.end()) { return FAILURE; }
@@ -603,7 +603,7 @@ ClientSocket::moveBody(Body *bod)
 void
 ClientSocket::moveDynamicBodies(double timeStep)
 {
-  QTextStream os(this);
+  Q3TextStream os(this);
   if (timeStep < 0) {
     timeStep = graspitCore->getWorld()->getTimeStep();
   }
@@ -626,7 +626,7 @@ ClientSocket::moveDynamicBodies(double timeStep)
 void
 ClientSocket::computeNewVelocities(double timeStep)
 {
-  QTextStream os(this);
+  Q3TextStream os(this);
   int result = graspitCore->getWorld()->getDynamicsEngine()->computeNewVelocities(timeStep);
   os << result << "\n";
 }

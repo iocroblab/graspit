@@ -82,8 +82,8 @@
 
 MainWindow::MainWindow(QWidget *parent)
 {
-  mWindow = new Q3MainWindow(parent);
-  //mWindow = new QMainWindow(parent);
+  //mWindow = new Q3MainWindow(parent);
+  mWindow = new QMainWindow(parent);
   mUI = new Ui::MainWindowUI;
   mUI->setupUi(mWindow);
   init();

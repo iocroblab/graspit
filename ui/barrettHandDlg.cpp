@@ -58,7 +58,7 @@ bool BarrettHandDlg::setWorld(World *w)
 #endif
   world = w;
   if (!world->getCurrentHand()) { return false; }
-  if (!world->getCurrentHand()->isA("Barrett")) { return false; }
+  if (!world->getCurrentHand()->metaObject()->className() == QString("Barrett")) { return false; }
   mSimBarrett = (Barrett *)world->getCurrentHand();
   mRealBarrett = mSimBarrett->getRealHand();
   if (!mRealBarrett) { return false; }

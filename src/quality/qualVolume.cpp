@@ -51,7 +51,7 @@ struct QualVolumeParamT {
 QualVolume::QualVolume(qmDlgDataT *data) : QualityMeasure(data)
 {
   QComboBox *gwsType = (QComboBox *)data->paramPtr;
-  gws = grasp->addGWS(gwsType->currentText().latin1());
+  gws = grasp->addGWS(gwsType->currentText().toUtf8().constData());
 }
 
 QualVolume::QualVolume(Grasp *g, QString n, const char *gwsType) : QualityMeasure(g, n)
@@ -105,17 +105,24 @@ QualVolume::buildParamArea(qmDlgDataT *qmData)
 #endif
 
   QBoxLayout *l = new QHBoxLayout(qmData->settingsArea);
-  l->setAutoAdd(true);
+  //l->setAutoAdd(true);
 
   // create the GWS type menu
   new QLabel(QString("Limit unit GWS using:"), qmData->settingsArea);
-  QComboBox *gwsComboBox = new QComboBox(qmData->settingsArea, "gwsComboBox");
+  QComboBox *gwsComboBox = new QComboBox(qmData->settingsArea);//, "gwsComboBox");
 
-  // count the number of possible gws types
+
+  // Create a QStringList to use in the QComboBox
+  QStringList gwsTypeList, twsTypeList;
+
+  for (i = 0; GWS::TYPE_LIST[i]; i++)
+     gwsTypeList << GWS::TYPE_LIST[i];
+
+  gwsComboBox->addItems(gwsTypeList);
+
   for (i = 0; GWS::TYPE_LIST[i]; i++) {
-    gwsComboBox->insertItem(QString(GWS::TYPE_LIST[i]));
     if (currQM && !strcmp(currQM->gws->getType(), GWS::TYPE_LIST[i])) {
-      gwsComboBox->setCurrentItem(i);
+      gwsComboBox->setCurrentText(QString(GWS::TYPE_LIST[i]));
     }
   }
 

@@ -176,7 +176,7 @@ QualPCR::buildParamArea(qmDlgDataT *qmData)
     wrenchMultiplier = qmData->grasp->getObject()->getMass() * 1.0e-3 * 9.80665 * 1.0e6;
   } 
 
-  QGridLayout *wl = new QGridLayout(qmData->settingsArea,8,2);
+  QGridLayout *wl = new QGridLayout(qmData->settingsArea);//,8,2);
 
   wl->addWidget(new QLabel(QString("Multiplier:")));
   params.wrenchInput = new QLineEdit();

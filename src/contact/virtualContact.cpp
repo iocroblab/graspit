@@ -426,7 +426,7 @@ VirtualContact::loadFromXml(const TiXmlElement * root)
     {
 
      QString friction_edge = xmlElement->GetText();
-     QStringList l = QStringList::split(' ', friction_edge);
+     QStringList l = friction_edge.split(QLatin1Char(' '), QString::KeepEmptyParts);
 
      for (int j=0; j<6; j++)
      {
@@ -437,8 +437,9 @@ VirtualContact::loadFromXml(const TiXmlElement * root)
 
      xmlElement = findXmlElement(root, "location");
      QString location = xmlElement->GetText();
-     location = location.simplifyWhiteSpace().stripWhiteSpace();
-     QStringList l = QStringList::split(' ', location);
+     location = location.simplified();
+     location = location.trimmed();
+     QStringList l = location.split(QLatin1Char(' '), QString::KeepEmptyParts);
      if(l.count()!=3){
        DBGA("Invalid Location");
        return FAILURE;
@@ -448,8 +449,9 @@ VirtualContact::loadFromXml(const TiXmlElement * root)
 
      xmlElement = findXmlElement(root, "rotation");
      QString rotation = xmlElement->GetText();
-     rotation = rotation.simplifyWhiteSpace().stripWhiteSpace();
-     l = QStringList::split(' ', rotation);
+     rotation = rotation.simplified();
+     rotation = rotation.trimmed();
+     l = rotation.split(QLatin1Char(' '), QString::KeepEmptyParts);
      if(l.count()!=4){
        DBGA("Invalid Rotation");
        return FAILURE;
@@ -462,8 +464,9 @@ VirtualContact::loadFromXml(const TiXmlElement * root)
 
      xmlElement = findXmlElement(root, "translation");
      QString translation = xmlElement->GetText();
-     translation = translation.simplifyWhiteSpace().stripWhiteSpace();
-     l = QStringList::split(' ', translation);
+     translation = translation.simplified();
+     translation = translation.trimmed();
+     l = translation.split(QLatin1Char(' '), QString::KeepEmptyParts);
      if(l.count()!=3){
        DBGA("Invalid Translation");
        return FAILURE;
@@ -476,8 +479,9 @@ VirtualContact::loadFromXml(const TiXmlElement * root)
 
      xmlElement = findXmlElement(root, "normal");
      QString normal_str = xmlElement->GetText();
-     normal_str = normal_str.simplifyWhiteSpace().stripWhiteSpace();
-     l = QStringList::split(' ', normal_str);
+     normal_str = normal_str.simplified();
+     normal_str = normal_str.trimmed();
+     l = normal_str.split(QLatin1Char(' '), QString::KeepEmptyParts);
      if(l.count()!=3){
        QTWARNING("Invalid Normal");
        return FAILURE;

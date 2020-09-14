@@ -77,9 +77,13 @@ void DBaseDlg::init()
   if (mDBMgr) {
     getModelList();
   }
-  sortBox->insertItem("Epsilon");
-  sortBox->insertItem("Volume");
-  sortBox->insertItem("Energy");
+
+  QStringList sortBoxList;
+  sortBoxList << "Epsilon" << "Volume" << "Energy";
+  sortBox->insertItems(0,sortBoxList);
+//  sortBox->insertItem("Epsilon");
+//  sortBox->insertItem("Volume");
+//  sortBox->insertItem("Energy");
 }
 
 void DBaseDlg::destroy()
@@ -150,7 +154,7 @@ void DBaseDlg::connectButton_clicked()
 
 #ifndef ROS_DATABASE_MANAGER
   mDBMgr = new db_planner::SqlDatabaseManager(hostLineEdit->text().toStdString(),
-                                              atoi(portLineEdit->text().latin1()),
+                                              atoi(portLineEdit->text().toUtf8()),
                                               usernameLineEdit->text().toStdString(),
                                               passwordLineEdit->text().toStdString(),
                                               databaseLineEdit->text().toStdString(),
@@ -464,24 +468,34 @@ void DBaseDlg::classChanged() {
 void DBaseDlg::displayModelList() {
   std::set<string> tags;
   mModelMap.clear();
+  QStringList modelsComboBoxList, classesComboBoxList;
   for (int i = 0; i < (int)mModelList.size(); ++i) {
-    modelsComboBox->insertItem(QString(mModelList[i]->ModelName().c_str()));
+//    modelsComboBox->insertItem(QString(mModelList[i]->ModelName().c_str()));
+      modelsComboBoxList << QString(mModelList[i]->ModelName().c_str());
     tags.insert(mModelList[i]->Tags().begin(), mModelList[i]->Tags().end());
     mModelMap.insert(std::make_pair(mModelList[i]->ModelName(), i));
   }
+  modelsComboBox->insertItems(0, modelsComboBoxList );
   classesComboBox->clear();
-  classesComboBox->insertItem("ALL");
+
+  classesComboBoxList << "ALL";
+
   for (std::set<string>::iterator i = tags.begin(); i != tags.end(); ++i) {
-    classesComboBox->insertItem(QString((*i).c_str()));
+    classesComboBoxList << QString((*i).c_str());
   }
+  classesComboBox->insertItems(0,classesComboBoxList);
 }
 
 void DBaseDlg::displayGraspTypeList(std::vector<std::string> list) {
+
+  QStringList typesComboBoxList;
   typesComboBox->clear();
-  typesComboBox->insertItem("ALL");
+
+  typesComboBoxList << "ALL";
   for (size_t i = 0; i < list.size(); ++i) {
-    typesComboBox->insertItem(QString(list[i].c_str()));
+    typesComboBoxList << QString(list[i].c_str());
   }
+  typesComboBox->insertItems(0, typesComboBoxList);
 }
 
 //core routine that shows the i-th loaded grasp
@@ -503,7 +517,7 @@ void DBaseDlg::showGrasp(int i)
       return;
     }
     static_cast<GraspitDBGrasp *>(mGraspList[i])->getFinalGraspPlanningState()->execute();
-    if (graspitCore->getWorld()->getCurrentHand()->isA("Barrett")) {
+    if (graspitCore->getWorld()->getCurrentHand()->metaObject()->className() == QString("Barrett")) {
       graspitCore->getWorld()->getCurrentHand()->autoGrasp(true);
     }
   }

@@ -30,7 +30,7 @@
 #ifndef GRASPITSERVER_HXX
 #include <q3serversocket.h>
 #include <q3socket.h>
-#include <qstringlist.h>
+#include <QStringlist>
 #include <iostream>
 #include <vector>
 

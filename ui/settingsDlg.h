@@ -64,8 +64,8 @@ class SettingsDlg : public QObject
 
   public:
     Ui::SettingsDlgUI *dlgUI;
-    SettingsDlg(QWidget *parent = 0, Qt::WFlags f = 0) {
-      dlgImpl = new QDialog(parent, f);
+    SettingsDlg(QWidget *parent = 0, Qt::WindowFlags f = 0) {
+      dlgImpl = new QDialog(parent);
       dlgUI = new Ui::SettingsDlgUI;
       dlgUI->setupUi(dlgImpl);
       init();

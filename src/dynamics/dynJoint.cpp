@@ -248,7 +248,7 @@ RevoluteDynJoint::updateValues()
   axis = aa.axis();
   if (axis.z() < 0) { val = -val; }
 
-  DBGP("link " << prevLink->getName().latin1() << " - link " << nextLink->getName().latin1());
+  DBGP("link " << prevLink->getName().toUtf8().constData() << " - link " << nextLink->getName().toUtf8().constData());
   DBGP(" joint angle: " << val * 180.0 / M_PI << " radians: " << val << " velocity: " << vel2 - vel1);
 
   joint->setDynamicsVal(val);
@@ -308,7 +308,7 @@ UniversalDynJoint::updateValues()
   //original GraspIt:
   val = atan2(ax2.dot(ax0.cross(ref1)), ax2.dot(ref1));
 
-  DBGP("link " << prevLink->getName().latin1() << " - link " << nextLink->getName().latin1() << ":");
+  DBGP("link " << prevLink->getName().toUtf8().constData() << " - link " << nextLink->getName().toUtf8().constData() << ":");
   DBGP("   joint1 angle: " << val * 180.0 / M_PI << " " << val << " (rad)");
   joint1->setDynamicsVal(val);
 
@@ -395,8 +395,8 @@ BallDynJoint::updateValues()
 
 
 #ifdef GRASPITDBG
-  printf("link %s - link %s joint1 angle: %le   %le(rad)\n", prevLink->getName().latin1(),
-         nextLink->getName().latin1(), val * 180.0 / M_PI, val);
+  printf("link %s - link %s joint1 angle: %le   %le(rad)\n", prevLink->getName().toUtf8().constData(),
+         nextLink->getName().toUtf8().constData(), val * 180.0 / M_PI, val);
   //    std::cout << " velocity: "<<vel2-vel1<<std::endl;
 #endif
   //    printf("link %d - link %d joint angle: %lf\n",l-1,l,angle);
@@ -417,8 +417,8 @@ BallDynJoint::updateValues()
   val = atan2(ax2.dot(ax0), ax2.dot(ax0.cross(ax1)));
 
 #ifdef GRASPITDBG
-  printf("link %s - link %s joint2 angle: %le   %le(rad)\n", prevLink->getName().latin1(),
-         nextLink->getName().latin1(), val * 180.0 / M_PI, val);
+  printf("link %s - link %s joint2 angle: %le   %le(rad)\n", prevLink->getName().toUtf8().constData(),
+         nextLink->getName().toUtf8().constData(), val * 180.0 / M_PI, val);
   //    std::cout << " velocity: "<<vel2-vel1<<std::endl;
 #endif
   //    printf("link %d - link %d joint angle: %lf\n",l-1,l,angle);
@@ -440,8 +440,8 @@ BallDynJoint::updateValues()
   val = atan2(ref2.dot(ax1), ref2.dot(ax1.cross(ax2)));
 
 #ifdef GRASPITDBG
-  printf("link %s - link %s joint3 angle: %le   %le(rad)\n", prevLink->getName().latin1(),
-         nextLink->getName().latin1(), val * 180.0 / M_PI, val);
+  printf("link %s - link %s joint3 angle: %le   %le(rad)\n", prevLink->getName().toUtf8().constData(),
+         nextLink->getName().toUtf8().constData(), val * 180.0 / M_PI, val);
   //    std::cout << " velocity: "<<vel2-vel1<<std::endl;
 #endif
   //    printf("link %d - link %d joint angle: %lf\n",l-1,l,angle);

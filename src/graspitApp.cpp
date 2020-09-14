@@ -46,9 +46,9 @@ static QLabel *splash = 0;
 void
 GraspItApp::showSplash()
 {
-  QRect screen = QApplication::desktop()->screenGeometry();
+/*  QRect screen = QApplication::desktop()->screenGeometry();
   QSettings config;
-  config.insertSearchPath(QSettings::Windows, "/Columbia");
+  //config.insertSearchPath(QSettings::Windows, "/Columbia");
 
   QRect mainRect;
   QString keybase = "/GraspIt/0.9/";
@@ -63,7 +63,7 @@ GraspItApp::showSplash()
     splash = new QLabel(0, "splash", Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     // WStyle_Customize | WStyle_StaysOnTop
     splash->setAttribute(Qt::WA_DeleteOnClose, true);
-    splash->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+    splash->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Raised);
     splash->setPixmap(load_pixmap("splash.jpg"));
     splash->adjustSize();
     splash->setFixedSize(splash->sizeHint());
@@ -73,7 +73,7 @@ GraspItApp::showSplash()
     splash->repaint(FALSE);
     QApplication::flush();
     //  set_splash_status( "Initializing..." );
-  }
+  }*/
 }
 
 /*!

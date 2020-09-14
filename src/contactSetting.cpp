@@ -206,7 +206,7 @@ addContacts(Body *body1, Body *body2, ContactReport &contactSet, bool softContac
 
   for (i = 0, cp = contactSet.begin(); cp != contactSet.end(); cp++, i++) {
 
-    DBGP(body1->getName().latin1() << " - " << body2->getName().latin1() << " contact: " <<
+    DBGP(body1->getName().toUtf8().constData() << " - " << body2->getName().toUtf8().constData() << " contact: " <<
          cp->b1_pos << " " <<  cp->b1_normal);
 
     //this is an attempt to check if the contact normals point in the right direction
@@ -260,7 +260,7 @@ addContacts(Body *body1, Body *body2, ContactReport &contactSet, bool softContac
         if (ancestor->getMate()) { body1->removePrevContact(ancestor->getMate()); }
         body2->removePrevContact(ancestor);
       } else {
-        //        fprintf(stderr,"New contact between %s and %s\n",body1->getName().latin1(), body2->getName().latin1() );
+        //        fprintf(stderr,"New contact between %s and %s\n",body1->getName().toUtf8().constData(), body2->getName().toUtf8().constData() );
       }
     }
   }
