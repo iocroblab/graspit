@@ -69,7 +69,12 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeMacros/")
 
 find_package(Qhull REQUIRED)
-find_package(SoQt4 REQUIRED)
+find_package( SoQt REQUIRED CONFIG)
+if( SoQt_FOUND )
+   add_definitions( ${SoQt_DEFINITIONS})
+   include_directories( ${SoQt_INCLUDE_DIRS} )
+endif( SoQt_FOUND )
+
 find_package(BLAS REQUIRED)
 find_package(LAPACK REQUIRED)
 find_package(Eigen3)
@@ -103,10 +108,22 @@ if (OPTIMIZATION_SOLVER STREQUAL GUROBI)
 
 endif (OPTIMIZATION_SOLVER STREQUAL GUROBI)
 
-SET( QT_USE_QT3SUPPORT TRUE )
-find_package(Qt4 COMPONENTS QtCore QtSql REQUIRED)
+# SET( QT_USE_QT3SUPPORT TRUE )
+# find_package(Qt4 COMPONENTS QtCore QtSql REQUIRED)
+# 
+# include (${QT_USE_FILE})
 
-include (${QT_USE_FILE})
+
+find_package(Qt5 COMPONENTS Core Gui OpenGL Widgets Xml Sql REQUIRED)
+if(Qt5_FOUND)
+   message(STATUS "Qt5 found")
+   set(QT_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5OpenGL_LIBRARIES} 
+            ${Qt5Widgets_LIBRARIES} ${Qt5Xml_LIBRARIES} ${Qt5Sql_LIBRARIES})
+   include_directories( ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} 
+                                                ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS} ${Qt5Sql_INCLUDE_DIRS} )
+endif( Qt5_FOUND )
+
+
 
 #--------------------------------------- Core sources ---------------------------------
 
@@ -194,7 +211,7 @@ set (GRASPIT_INCLUDEDIR_HEADERS
     ${GSRC}/include/graspit/worldElementFactory.h
     ${GSRC}/include/graspit/world.h
     ${GSRC}/include/graspit/graspitCore.h
-    ${GSRC}/include/graspit/graspitServer.h
+#    ${GSRC}/include/graspit/graspitServer.h
     ${GSRC}/include/graspit/graspitApp.h
     ${GSRC}/include/graspit/arch.h
     ${GSRC}/include/graspit/FitParabola.h
@@ -375,7 +392,7 @@ set (MOC_HEADERS
     ${GSRC}/include/graspit/world.h
     ${GSRC}/include/graspit/grasp.h
     ${GSRC}/include/graspit/worldElement.h
-    ${GSRC}/include/graspit/graspitServer.h
+ #   ${GSRC}/include/graspit/graspitServer.h
     ${GSRC}/include/graspit/ivmgr.h
     ${GSRC}/include/graspit/EGPlanner/egPlanner.h
     ${GSRC}/include/graspit/EGPlanner/simAnn.h
@@ -428,7 +445,7 @@ set (GRASPIT_CORE_SOURCES
     ${GSRC}/src/gloveInterface.cpp 
     ${GSRC}/src/grasp.cpp 
     ${GSRC}/src/graspitCore.cpp
-    ${GSRC}/src/graspitServer.cpp 
+  #  ${GSRC}/src/graspitServer.cpp 
     ${GSRC}/src/graspitApp.cpp 
     ${GSRC}/src/graspRecord.cpp 
     ${GSRC}/src/graspSolver.cpp 
@@ -766,15 +783,18 @@ set (GRASPIT_CORE_SOURCES
 # The qt_image_collection.cpp must then be added to the sources to compile.
 # I also tried adding images as resource (QT4_ADD_RESOURCES) but this didn't work with the 
 # current GraspIt source.
-ADD_CUSTOM_COMMAND(OUTPUT 
-    ${CMAKE_CURRENT_BINARY_DIR}/qt_image_collection.cpp 
-    COMMAND ${QT_UIC3_EXECUTABLE} 
-    ARGS -o ${CMAKE_CURRENT_BINARY_DIR}/qt_image_collection.cpp 
-        -embed graspit ${GRASPIT_IMAGES} 
-    DEPENDS ${GRASPIT_IMAGES})
+# ADD_CUSTOM_COMMAND(OUTPUT 
+#     ${CMAKE_CURRENT_BINARY_DIR}/qt_image_collection.cpp 
+#     COMMAND ${QT_UIC3_EXECUTABLE} 
+#     ARGS -o ${CMAKE_CURRENT_BINARY_DIR}/qt_image_collection.cpp 
+#         -embed graspit ${GRASPIT_IMAGES} 
+#     DEPENDS ${GRASPIT_IMAGES})
+# 
+# SET(GRASPIT_IMAGE_SOURCES 
+#     ${CMAKE_CURRENT_BINARY_DIR}/qt_image_collection.cpp)
+set(graspit_RESOURCES graspitRes.qrc)
+QT5_ADD_RESOURCES(graspit_RESOURCES_RCC ${kautham_RESOURCES})
 
-SET(GRASPIT_IMAGE_SOURCES 
-    ${CMAKE_CURRENT_BINARY_DIR}/qt_image_collection.cpp)
 
 ################################
 ## Make Qt Moc files of GraspIT
@@ -799,11 +819,11 @@ file(MAKE_DIRECTORY ${GRASPIT_UI_INCLUDE_PATH})
 set (OLD_CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}) # backup current binary dir
 set (CMAKE_CURRENT_BINARY_DIR ${GRASPIT_UI_INCLUDE_PATH}) #artificially changing output location for UI files
 
-QT4_WRAP_UI(UI_OUTFILES ${ALL_GRASPIT_FORMS}) # generate UI outfiles (will use CMAKE_CURRENT_BINARY_DIR)
+QT5_WRAP_UI(UI_OUTFILES ${ALL_GRASPIT_FORMS}) # generate UI outfiles (will use CMAKE_CURRENT_BINARY_DIR)
 
 set (CMAKE_CURRENT_BINARY_DIR ${OLD_CMAKE_CURRENT_BINARY_DIR}) # restore current binary dir
 
-QT4_WRAP_CPP(MOC_OUTFILES ${MOC_HEADERS})
+QT5_WRAP_CPP(MOC_OUTFILES ${MOC_HEADERS})
 
 
 # add Qt stuff to the includes
