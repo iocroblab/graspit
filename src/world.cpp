@@ -340,6 +340,8 @@ World::setDefaults()
   //rubber
   cofTable[5][5] = 2.0;
   kcofTable[5][5] = 1.9;
+
+  saveSettings();
 }
 
 /*! Reads in previously saved coefficients and parameters, if they exist. In Windows,
