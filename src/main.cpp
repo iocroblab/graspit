@@ -49,7 +49,7 @@
 #include <iostream>
 #include <graspit/graspitApp.h>
 #include "graspit/graspitCore.h"
-#include "graspit/graspitServer.h"
+//#include "graspit/graspitServer.h"
 #include "mainWindow.h"
 #include "graspit/cmdline/cmdline.h"
 #include "graspit/graspitParser.h"
@@ -78,10 +78,11 @@ int main(int argc, char **argv)
   bool headless = parsed_args->exist("headless");
 
   GraspItApp app(argc, argv);
+  app.setAttribute(Qt::AA_UseDesktopOpenGL);
   if (!headless) {
     if (app.splashEnabled()) {
       app.showSplash();
-      QApplication::setOverrideCursor(Qt::waitCursor);
+      QApplication::setOverrideCursor(Qt::WaitCursor);
     }
   }
 
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
 
   if (!headless)
   {
-    app.setMainWidget(core.getMainWindow()->mWindow);
+    //app.setMainWidget(core.getMainWindow()->mWindow);
     if (app.splashEnabled()) {
       app.closeSplash();
       QApplication::restoreOverrideCursor();

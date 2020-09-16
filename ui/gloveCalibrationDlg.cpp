@@ -42,19 +42,16 @@ void GloveCalibrationDlg::init()
 
   mInterface->saveRobotPose();
 
-  calibrationTypeBox->insertItem("Fist");
-  calibrationTypeBox->insertItem("Simple thumb");
-  calibrationTypeBox->insertItem("Complex thumb");
-  calibrationTypeBox->insertItem("Abd. - Add.");
-  calibrationTypeBox->insertItem("Mean Pose");
-  calibrationTypeBox->setCurrentItem(2);
+  QStringList calibrationTypeBoxList, poseDistanceBoxList;
+
+  calibrationTypeBoxList << "Fist" << "Simple thumb" << "Complex thumb" << "Abd. - Add." << "Mean Pose";
+  calibrationTypeBox->addItems(calibrationTypeBoxList);
+  calibrationTypeBox->setCurrentIndex(2);
   mInterface->initCalibration(GloveInterface::COMPLEX_THUMB);
 
-  poseDistanceBox->insertItem("0");
-  poseDistanceBox->insertItem("17");
-  poseDistanceBox->insertItem("61");
-  poseDistanceBox->insertItem("82");
-  poseDistanceBox->setCurrentItem(0);
+  poseDistanceBoxList << "0" << "17" << "61" << "82";
+  poseDistanceBox->addItems(poseDistanceBoxList);
+  poseDistanceBox->setCurrentIndex(0);
 
   update();
 }
@@ -116,7 +113,7 @@ void GloveCalibrationDlg::save()
     if (fn.section('.', 1).isEmpty()) {
       fn.append(".txt");
     }
-    mInterface->saveCalibration(fn.latin1());
+    mInterface->saveCalibration(fn.toUtf8().constData());
   }
 }
 
@@ -136,7 +133,7 @@ void GloveCalibrationDlg::savePoses()
     if (fn.section('.', 1).isEmpty()) {
       fn.append(".pos");
     }
-    mInterface->saveCalibrationPoses(fn.latin1());
+    mInterface->saveCalibrationPoses(fn.toUtf8().constData());
   }
 }
 
@@ -146,7 +143,7 @@ void GloveCalibrationDlg::loadPoses()
   QString fn(QFileDialog::getOpenFileName(this, QString(), QString(getenv("GRASPIT")) + QString("/models/CyberGlove"),
                                           "Glove Pose Files (*.pos)"));
   if (!fn.isEmpty()) {
-    mInterface->loadCalibrationPoses(fn.latin1());
+    mInterface->loadCalibrationPoses(fn.toUtf8().constData());
   }
   update();
 }
@@ -156,14 +153,14 @@ void GloveCalibrationDlg::loadCalibration()
   QString fn(QFileDialog::getOpenFileName(this, QString(), QString(getenv("GRASPIT")) + QString("/models/CyberGlove"),
                                           "Glove Pose Files (*.txt)"));
   if (!fn.isEmpty()) {
-    mInterface->loadCalibration(fn.latin1());
+    mInterface->loadCalibration(fn.toUtf8().constData());
   }
 }
 
 
 void GloveCalibrationDlg::initCalibration()
 {
-  switch (calibrationTypeBox->currentItem()) {
+  switch (calibrationTypeBox->currentIndex()) {
     case 0:
       mInterface->initCalibration(GloveInterface::FIST);
       break;

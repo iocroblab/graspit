@@ -59,13 +59,13 @@ GraspCaptureDlg::init(World *w) {
   mQualEpsilon = NULL;
   mQualVolume = NULL;
   mCurrentHand = NULL;
-  saveToDBaseButton->setEnabled(FALSE);
+  saveToDBaseButton->setEnabled(false);
 
   if (graspitCore->getDBMgr()) {
-    saveToDBaseButton->setEnabled(TRUE);
+    saveToDBaseButton->setEnabled(true);
   } else {
     QTWARNING("DBase connection not found; only Save to File possible.");
-    saveToDBaseButton->setEnabled(FALSE);
+    saveToDBaseButton->setEnabled(false);
   }
 }
 
@@ -143,9 +143,9 @@ GraspCaptureDlg::saveToFileButtonClicked()
                                           QString(getenv("GRASPIT")), "Text Files (*.txt)"));
   if (fn.isEmpty()) { return; }
   if (fn.section('.', 1).isEmpty()) { fn.append(".txt"); }
-  FILE *fp = fopen(fn.ascii(), "a");
+  FILE *fp = fopen(fn.toUtf8().constData(), "a");
   if (!fp) {
-    DBGA("Failed to open save file " << fn.ascii());
+    DBGA("Failed to open save file " << fn.toUtf8().constData());
     return;
   }
   std::list<GraspPlanningState *>::iterator it;

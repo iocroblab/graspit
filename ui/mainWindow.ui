@@ -277,7 +277,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_3">
+   <widget class="QGroupBox" name="worldBox">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -286,28 +286,19 @@
       <height>441</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="worldBox">
-     <item>
-      <widget class="QWidget" name="widget_3" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>849</width>
-         <height>0</height>
-        </size>
-       </property>
-       <widget class="QWidget" name="viewerHolder" native="true">
-        <property name="geometry">
-         <rect>
-          <x>9</x>
-          <y>29</y>
-          <width>841</width>
-          <height>401</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-     </item>
-    </layout>
+    <property name="title">
+     <string>Untitled</string>
+    </property>
+    <widget class="QWidget" name="viewerHolder" native="true">
+     <property name="geometry">
+      <rect>
+       <x>-1</x>
+       <y>29</y>
+       <width>851</width>
+       <height>421</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="contactsGroupBox">
     <property name="geometry">
@@ -406,7 +397,7 @@
    </widget>
    <widget class="QMenu" name="Stereo">
     <property name="title">
-     <string>Stereo</string>
+     <string>&amp;Stereo</string>
     </property>
     <addaction name="stereoOnAction"/>
     <addaction name="stereoOffAction"/>

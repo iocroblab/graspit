@@ -103,13 +103,13 @@ MainWindow::MainWindow(QWidget *parent)
   QObject::connect(mUI->helpAboutAction, SIGNAL(triggered()), this, SLOT(helpAbout()));
   QObject::connect(mUI->helpAboutQTAction, SIGNAL(triggered()), this, SLOT(helpAboutQT()));
   // -- body meny
-  QObject::connect(mUI->elementGroup, SIGNAL(selected(QAction *)), this, SLOT(setTool(QAction *)));
-  QObject::connect(mUI->elementCollisionToggleAction, SIGNAL(activated()),
-                   this, SLOT(elementTurnOffCollisions()));
-  QObject::connect(mUI->elementCollisionToggleAction, SIGNAL(toggled(bool)),
-                   this, SLOT(updateCollisionAction(bool)));
-  QObject::connect(mUI->elementBodyPropertiesAction, SIGNAL(activated()),
-                   this, SLOT(elementBodyProperties()));
+  //QObject::connect(mUI->elementGroup, SIGNAL(selected(QAction *)), this, SLOT(setTool(QAction *)));
+  //QObject::connect(mUI->elementCollisionToggleAction, SIGNAL(toggled()),
+  //                 this, SLOT(elementTurnOffCollisions()));
+  //QObject::connect(mUI->elementCollisionToggleAction, SIGNAL(toggled(bool)),
+  //                 this, SLOT(updateCollisionAction(bool)));
+  //QObject::connect(mUI->elementBodyPropertiesAction, SIGNAL(toggled()),
+  //                 this, SLOT(elementBodyProperties()));
   // -- grasp menu, part I
   QObject::connect(mUI->graspAutoGraspAction, SIGNAL(triggered()), this, SLOT(graspAutoGrasp()));
   QObject::connect(mUI->graspAuto_OpenAction, SIGNAL(triggered()), this, SLOT(graspAutoOpen()));
@@ -144,11 +144,11 @@ MainWindow::MainWindow(QWidget *parent)
   // -- misc menu
   QObject::connect(mUI->dynamicsArch_BuilderAction, SIGNAL(triggered()), this, SLOT(archBuilder()));
   // -- contacts
-  QObject::connect(mUI->contactsListBox, SIGNAL(highlighted(int)), this, SLOT(contactSelected(int)));
+  //QObject::connect(mUI->contactsListBox, SIGNAL(highlighted(int)), this, SLOT(contactSelected(int)));
   // -- dynamics
-  QObject::connect(mUI->dynamicsPlayAction, SIGNAL(activated()), this, SLOT(toggleDynamics()));
-  QObject::connect(mUI->dynamicsPopAction, SIGNAL(activated()), this, SLOT(dynamicsPopState()));
-  QObject::connect(mUI->dynamicsPushAction, SIGNAL(activated()), this, SLOT(dynamicsPushState()));
+  //QObject::connect(mUI->dynamicsPlayAction, SIGNAL(activated()), this, SLOT(toggleDynamics()));
+  //QObject::connect(mUI->dynamicsPopAction, SIGNAL(activated()), this, SLOT(dynamicsPopState()));
+  //QObject::connect(mUI->dynamicsPushAction, SIGNAL(activated()), this, SLOT(dynamicsPushState()));
   // -- toolbars
   QObject::connect(mUI->materialComboBox, SIGNAL(activated(int)), this, SLOT(materialSelected(int)));
   QObject::connect(mUI->graspedBodyBox, SIGNAL(activated(int)), this, SLOT(selectGraspedBody(int)));
@@ -168,14 +168,16 @@ void MainWindow::init()
 {
   world = NULL;
   mUI->timeReadout->display("00:00.000");
-  mWindow->statusBar()->message("Ready", 2000);
-  QIcon playIconSet = mUI->dynamicsPlayAction->iconSet();
-  playIconSet.setPixmap(load_pixmap("pause.xpm"), QIcon::Automatic, QIcon::Normal, QIcon::On);
-  mUI->dynamicsPlayAction->setIconSet(playIconSet);
+  mWindow->statusBar()->showMessage("Ready", 2000);
+  QIcon playIconSet = mUI->dynamicsPlayAction->icon();
+  //playIconSet.setPixmap(load_pixmap("pause.xpm"), QIcon::Automatic, QIcon::Normal, QIcon::On);
+  playIconSet = QIcon("pause.xpm");
+  mUI->dynamicsPlayAction->setIcon(playIconSet);
 
-  QIcon collisionIconSet = mUI->elementCollisionToggleAction->iconSet();
-  collisionIconSet.setPixmap(load_pixmap("nocollide.xpm"), QIcon::Automatic, QIcon::Normal, QIcon::On);
-  mUI->elementCollisionToggleAction->setIconSet(collisionIconSet);
+  QIcon collisionIconSet = mUI->elementCollisionToggleAction->icon();
+  //collisionIconSet.setPixmap(load_pixmap("nocollide.xpm"), QIcon::Automatic, QIcon::Normal, QIcon::On);
+  collisionIconSet = QIcon("nocollide.xpm");
+  mUI->elementCollisionToggleAction->setIcon(collisionIconSet);
 }
 
 /*!
@@ -263,7 +265,7 @@ void MainWindow::fileOpen()
     return;
   }
   fileName = fn;
-  mUI->worldBox->setTitle(fileName);
+  //mUI->worldBox->setTitle(fileName);
   graspitCore->emptyWorld();
   graspitCore->getWorld()->load(fileName);
   //graspItGUI->getIVmgr()->getViewer()->viewAll();
@@ -406,15 +408,23 @@ void MainWindow::fileEditSettings()
   int i, j;
   SettingsDlg *dlg = new SettingsDlg(mWindow);
   dlg->setAttribute(Qt::WA_ShowModal, true);
+  QTableWidgetItem *item;
 
   if (dlg->exec() == QDialog::Accepted) {
     //Process the changes to the COFs
-    for (i = 0; i < dlg->dlgUI->staticFrictionTable->numRows() - 1; i++) {
-      world->materialNames[i] = dlg->dlgUI->staticFrictionTable->text(i + 1, 0);
+    for (i = 0; i < dlg->dlgUI->staticFrictionTable->rowCount() - 1; i++) {
+      //world->materialNames[i] = dlg->dlgUI->staticFrictionTable->text(i + 1, 0);
+      item = dlg->dlgUI->staticFrictionTable->item(i + 1, 0);
+      world->materialNames[i] = item->text();
 
-      for (j = 0; j < dlg->dlgUI->staticFrictionTable->numCols() - 1; j++) {
-        world->cofTable[i][j] = dlg->dlgUI->staticFrictionTable->text(i + 1, j + 1).toDouble();
-        world->kcofTable[i][j] = dlg->dlgUI->kineticFrictionTable->text(i + 1, j + 1).toDouble();
+      for (j = 0; j < dlg->dlgUI->staticFrictionTable->columnCount() - 1; j++) {
+        // world->cofTable[i][j] = dlg->dlgUI->staticFrictionTable->text(i + 1, j + 1).toDouble();
+        // world->kcofTable[i][j] = dlg->dlgUI->kineticFrictionTable->text(i + 1, j + 1).toDouble();
+
+        item = dlg->dlgUI->staticFrictionTable->item(i + 1, j + 1);
+        world->cofTable[i][j] = item->text().toDouble();
+        item = dlg->dlgUI->kineticFrictionTable->item(i + 1, j + 1);
+        world->kcofTable[i][j] = item->text().toDouble();
       }
     }
     world->dynamicsTimeStep = dlg->dlgUI->timeStepLine->text().toDouble() * 1.0e-3;
@@ -494,7 +504,7 @@ void MainWindow::setTool(QAction *a)
 */
 void MainWindow::elementTurnOffCollisions()
 {
-  world->toggleAllCollisions(!mUI->elementCollisionToggleAction->isOn());
+  world->toggleAllCollisions(!mUI->elementCollisionToggleAction->isEnabled());
 }
 
 /*!
@@ -568,7 +578,7 @@ void MainWindow::updateElementMenu()
         break;
       }
   }
-  mUI->elementCollisionToggleAction->setOn(collisionsOFF);
+  mUI->elementCollisionToggleAction->setEnabled(collisionsOFF);
 
 }
 
@@ -621,7 +631,7 @@ void MainWindow::graspCreateProjection(Grasp *g)
     else {
       grasp = g;
     }
-    GWS *gws = grasp->addGWS(dlg->gwsTypeComboBox->currentText().latin1());
+    GWS *gws = grasp->addGWS(dlg->gwsTypeComboBox->currentText().toUtf8().constData());
 
     double w[6];
     w[0] = dlg->fxCoord->text().toDouble();
@@ -711,7 +721,7 @@ MainWindow::graspStabilityAnalysis()
 */
 void MainWindow::graspCompliantPlanner()
 {
-  int gb = mUI->graspedBodyBox->currentItem();
+  int gb = mUI->graspedBodyBox->currentIndex();
   if (gb < 0 || world->getNumGB() < gb + 1) {
     fprintf(stderr, "No object selected\n");
     return;
@@ -770,7 +780,7 @@ void MainWindow::eigenGraspPlannerActivated()
     fprintf(stderr, "Current hand has no EigenGrasp information!\n");
     return;
   }
-  int gb = mUI->graspedBodyBox->currentItem();
+  int gb = mUI->graspedBodyBox->currentIndex();
   if (gb < 0 || world->getNumGB() < gb + 1) {
     fprintf(stderr, "No object selected\n");
     return;
@@ -800,7 +810,7 @@ void MainWindow::dbasePlannerAction_activated()
     QTWARNING("No hand selected");
     return;
   }
-  int gb = mUI->graspedBodyBox->currentItem();
+  int gb = mUI->graspedBodyBox->currentIndex();
   if (gb < 0 || world->getNumGB() < gb + 1) {
     QTWARNING("No object selected");
     return;
@@ -869,11 +879,11 @@ void MainWindow::stereoOn()
   mUI->contactsGroupBox->hide();
   mUI->qualityGroupBox->hide();
 
-  mUI->toolBar->hide();
-  mUI->Toolbar_2->hide();
-  mUI->ToolbarDynamics->hide();
-  mUI->graspToolbar->hide();
-  mUI->tendonToolbar->hide();
+//  mUI->toolBar->hide();
+//  mUI->Toolbar_2->hide();
+//  mUI->ToolbarDynamics->hide();
+//  mUI->graspToolbar->hide();
+//  mUI->tendonToolbar->hide();
 
   mWindow->menuBar()->hide();
   graspitCore->getIVmgr()->getViewer()->setDecoration(false);
@@ -893,11 +903,11 @@ void MainWindow::stereoOff()
   mUI->contactsGroupBox->show();
   mUI->qualityGroupBox->show();
 
-  mUI->toolBar->show();
-  mUI->Toolbar_2->show();
-  mUI->ToolbarDynamics->show();
-  mUI->graspToolbar->show();
-  mUI->tendonToolbar->show();
+//  mUI->toolBar->show();
+//  mUI->Toolbar_2->show();
+//  mUI->ToolbarDynamics->show();
+//  mUI->graspToolbar->show();
+//  mUI->tendonToolbar->show();
 
   mWindow->menuBar()->show();
   DBGA("Stereo off");
@@ -955,7 +965,7 @@ void MainWindow::updateContactsList()
 
     for (cp = contactList.begin(); cp != contactList.end(); cp++, contactNum++) {
       contactForce = (*cp)->getDynamicContactWrench();
-      mUI->contactsListBox->insertItem(QString("Contact %1:  force %2 %3 %4 torque %5 %6 %7").
+      mUI->contactsListBox->addItem(QString("Contact %1:  force %2 %3 %4 torque %5 %6 %7").
                                        arg(contactNum + 1).
                                        arg(contactForce[0], 5, 'f', 2).arg(contactForce[1], 5, 'f', 2).arg(contactForce[2], 5, 'f', 2).
                                        arg(contactForce[3], 5, 'f', 4).arg(contactForce[4], 5, 'f', 4).arg(contactForce[5], 5, 'f', 4));
@@ -1040,12 +1050,12 @@ void MainWindow::updateQualityList()
     h = world->getHand(i);
     g = h->getGrasp();
 
-    mUI->qualityListBox->insertItem(h->getName());
+    mUI->qualityListBox->addItem(h->getName());
 
     for (int j = 0; j < g->getNumQM(); j++) {
       valStr = "  " + g->getQM(j)->getName() +
                QString(": %1").arg(g->getQM(j)->evaluate(), 6, 'g', 3);
-      mUI->qualityListBox->insertItem(valStr);
+      mUI->qualityListBox->addItem(valStr);
     }
   }
 }
@@ -1056,7 +1066,7 @@ void MainWindow::updateQualityList()
 */
 void MainWindow::showDynamicsError(const char *errMsg)
 {
-  mUI->dynamicsPlayAction->setOn(false);
+  mUI->dynamicsPlayAction->setEnabled(false);
   QTWARNING(errMsg);
 }
 
@@ -1085,7 +1095,7 @@ void MainWindow::updateMaterialBoxList()
 {
   mUI->materialComboBox->clear();
   for (int i = 0; i < world->getNumMaterials(); i++) {
-    mUI->materialComboBox->insertItem(world->getMaterialName(i));
+    mUI->materialComboBox->addItem(world->getMaterialName(i));
   }
 }
 
@@ -1115,16 +1125,16 @@ void MainWindow::updateMaterialBox()
     for (i = 1; i < world->getNumSelectedBodies(); i++)
       if (world->getSelectedBody(i)->getMaterial() != firstMat) { break; }
     if (i == world->getNumSelectedBodies()) {
-      mUI->materialComboBox->setCurrentItem(firstMat);
+      mUI->materialComboBox->setCurrentIndex(firstMat);
       if (mUI->materialComboBox->count() > world->getNumMaterials()) {
         mUI->materialComboBox->removeItem(world->getNumMaterials());
       }
     }
     else {
       if (mUI->materialComboBox->count() == world->getNumMaterials()) {
-        mUI->materialComboBox->insertItem(QString(" "));
+        mUI->materialComboBox->addItem(QString(" "));
       }
-      mUI->materialComboBox->setCurrentItem(world->getNumMaterials());
+      mUI->materialComboBox->setCurrentIndex(world->getNumMaterials());
     }
   }
 }
@@ -1137,9 +1147,9 @@ void MainWindow::updateGraspBoxes()
 {
   mUI->handSelectionBox->clear();
   for (int i = 0; i < world->getNumHands(); i++) {
-    mUI->handSelectionBox->insertItem(world->getHand(i)->getName());
+    mUI->handSelectionBox->addItem(world->getHand(i)->getName());
     if (world->getCurrentHand() == world->getHand(i)) {
-      mUI->handSelectionBox->setCurrentItem(i);
+      mUI->handSelectionBox->setCurrentIndex(i);
     }
     updateTendonNamesBox();
     world->deselectTendon();
@@ -1147,9 +1157,9 @@ void MainWindow::updateGraspBoxes()
   mUI->graspedBodyBox->clear();
   if (world->getCurrentHand()) {
     for (int i = 0; i < world->getNumGB(); i++) {
-      mUI->graspedBodyBox->insertItem(world->getGB(i)->getName());
+      mUI->graspedBodyBox->addItem(world->getGB(i)->getName());
       if (world->getCurrentHand()->getGrasp()->getObject() == world->getGB(i)) {
-        mUI->graspedBodyBox->setCurrentItem(i);
+        mUI->graspedBodyBox->setCurrentIndex(i);
       }
     }
   }
@@ -1161,7 +1171,7 @@ void MainWindow::handleHandSelectionChange()
   int i;
   for (i = 0; i < world->getNumHands(); i++) {
     if (world->getCurrentHand() == world->getHand(i)) {
-      mUI->handSelectionBox->setCurrentItem(i);
+      mUI->handSelectionBox->setCurrentIndex(i);
     }
   }
   updateTendonNamesBox();
@@ -1175,7 +1185,7 @@ void MainWindow::handleHandSelectionChange()
 void MainWindow::selectGraspedBody(int sb)
 {
   GraspableBody *b = world->getGB(sb);
-  world->getHand(mUI->handSelectionBox->currentItem())->getGrasp()->setObject(b);
+  world->getHand(mUI->handSelectionBox->currentIndex())->getGrasp()->setObject(b);
   updateQualityList();
 }
 
@@ -1220,7 +1230,7 @@ void MainWindow::handleTendonSelectionArea()
     mUI->forcesVisibleLabel->setEnabled(false);
     mUI->forcesVisibleCheckBox->setEnabled(false);
     if (mUI->tendonNamesBox->isEnabled()) {
-      mUI->tendonNamesBox->setCurrentItem(mUI->tendonNamesBox->count() - 1);    /* "none selected" */
+      mUI->tendonNamesBox->setCurrentIndex(mUI->tendonNamesBox->count() - 1);    /* "none selected" */
     }
   } else {
     mUI->tendonActiveForceLabel->setEnabled(true);
@@ -1240,8 +1250,8 @@ void MainWindow::handleTendonSelectionArea()
     }
     //there's got to be a better way to do this...
     for (int i = 0; i < mUI->tendonNamesBox->count(); i++) {
-      if (mUI->tendonNamesBox->text(i) == world->getSelectedTendon()->getName()) {
-        mUI->tendonNamesBox->setCurrentItem(i);
+      if (mUI->tendonNamesBox->itemText(i) == world->getSelectedTendon()->getName()) {
+        mUI->tendonNamesBox->setCurrentIndex(i);
         break;
       }
     }
@@ -1327,7 +1337,7 @@ void MainWindow::updateTendonNamesBox()
   mUI->tendonNamesBox->setEnabled(true);
   mUI->tendonNamesBox->clear();
   for (i = 0; i < nrTendons; i++) {
-    mUI->tendonNamesBox->insertItem(world->getSelectedHandTendonName(i));
+    mUI->tendonNamesBox->addItem(world->getSelectedHandTendonName(i));
   }
-  mUI->tendonNamesBox->insertItem(QString("--none selected--"));
+  mUI->tendonNamesBox->addItem(QString("--none selected--"));
 }

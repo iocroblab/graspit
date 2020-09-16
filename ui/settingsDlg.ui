@@ -116,7 +116,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QTableView" name="staticFrictionTable"/>
+      <widget class="QTableWidget" name="staticFrictionTable"/>
      </item>
      <item>
       <widget class="QLabel" name="TextLabel2">
@@ -129,7 +129,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QTableView" name="kineticFrictionTable"/>
+      <widget class="QTableWidget" name="kineticFrictionTable"/>
      </item>
     </layout>
    </widget>

@@ -49,36 +49,43 @@ void SettingsDlg::init()
   int i, j;
   QString val;
   World *w = graspitCore->getWorld();
+  QTableWidgetItem *item;
+
 
   dlgUI->staticFrictionTable->horizontalHeader()->hide();
   dlgUI->staticFrictionTable->verticalHeader()->hide();
   dlgUI->kineticFrictionTable->horizontalHeader()->hide();
   dlgUI->kineticFrictionTable->verticalHeader()->hide();
-  dlgUI->staticFrictionTable->setTopMargin(0);
-  dlgUI->staticFrictionTable->setLeftMargin(0);
-  dlgUI->kineticFrictionTable->setTopMargin(0);
-  dlgUI->kineticFrictionTable->setLeftMargin(0);
+//  dlgUI->staticFrictionTable->setTopMargin(0);
+//  dlgUI->staticFrictionTable->setLeftMargin(0);
+//  dlgUI->kineticFrictionTable->setTopMargin(0);
+//  dlgUI->kineticFrictionTable->setLeftMargin(0);
 
 
-  dlgUI->staticFrictionTable->setNumRows(w->getNumMaterials() + 1);
-  dlgUI->staticFrictionTable->setNumCols(w->getNumMaterials() + 1);
-  dlgUI->kineticFrictionTable->setNumRows(w->getNumMaterials() + 1);
-  dlgUI->kineticFrictionTable->setNumCols(w->getNumMaterials() + 1);
+  dlgUI->staticFrictionTable->setRowCount(w->getNumMaterials() + 1);
+  dlgUI->staticFrictionTable->setColumnCount(w->getNumMaterials() + 1);
+  dlgUI->kineticFrictionTable->setRowCount(w->getNumMaterials() + 1);
+  dlgUI->kineticFrictionTable->setColumnCount(w->getNumMaterials() + 1);
 
-  dlgUI->staticFrictionTable->setItem(0, 0, new Q3TableItem(dlgUI->staticFrictionTable, Q3TableItem::Never, ""));
-  dlgUI->kineticFrictionTable->setItem(0, 0, new Q3TableItem(dlgUI->kineticFrictionTable, Q3TableItem::Never, ""));
+  item = new QTableWidgetItem(QString(""));
+  dlgUI->staticFrictionTable->setItem(0, 0, item);
+  dlgUI->kineticFrictionTable->setItem(0, 0, item);
 
   for (i = 0; i < w->getNumMaterials(); i++) {
-    dlgUI->staticFrictionTable->setText(0, i + 1, w->getMaterialName(i));
-    dlgUI->staticFrictionTable->setText(i + 1, 0, w->getMaterialName(i));
-    dlgUI->kineticFrictionTable->setText(0, i + 1, w->getMaterialName(i));
-    dlgUI->kineticFrictionTable->setText(i + 1, 0, w->getMaterialName(i));
+    item = new QTableWidgetItem(QString(w->getMaterialName(i)));
+    dlgUI->staticFrictionTable->setItem(0, i + 1, item);
+    dlgUI->staticFrictionTable->setItem(i + 1, 0, item);
+    dlgUI->kineticFrictionTable->setItem(0, i + 1, item);
+    dlgUI->kineticFrictionTable->setItem(i + 1, 0, item);
   }
 
   for (i = 0; i < w->getNumMaterials(); i++) {
     for (j = 0; j < w->getNumMaterials(); j++) {
-      dlgUI->staticFrictionTable->setText(i + 1, j + 1, val.setNum(w->getCOF(i, j)));
-      dlgUI->kineticFrictionTable->setText(i + 1, j + 1, val.setNum(w->getKCOF(i, j)));
+      QTableWidgetItem *itemStaticFriction, *itemKineticFriction;
+      itemStaticFriction = new QTableWidgetItem(val.number(w->getCOF(i, j)));
+      dlgUI->staticFrictionTable->setItem(i + 1, j + 1, itemStaticFriction);
+      itemKineticFriction = new QTableWidgetItem(val.number(w->getKCOF(i, j)));
+      dlgUI->kineticFrictionTable->setItem(i + 1, j + 1, itemKineticFriction);
     }
   }
 
@@ -116,9 +123,11 @@ void SettingsDlg::checkCOFEntry(int row, int col)
 {
   double val;
   bool ok;
-
+  QTableWidgetItem *item;
+/*
   if (row > 0 && col > 0) {
-    val = dlgUI->staticFrictionTable->text(row, col).toDouble(&ok);
+    item = dlgUI->staticFrictionTable->item(row, col);
+    val = item->text().toDouble(&ok);
     if (!ok || val < 0) {
       dlgUI->staticFrictionTable->setText(row, col, QString::number(currCOFVal));
       return;
@@ -129,6 +138,7 @@ void SettingsDlg::checkCOFEntry(int row, int col)
     dlgUI->kineticFrictionTable->setText(col, row, dlgUI->staticFrictionTable->text(row, col));
   }
   dlgUI->staticFrictionTable->setText(col, row, dlgUI->staticFrictionTable->text(row, col));
+  */
 }
 
 
@@ -139,7 +149,9 @@ void SettingsDlg::checkCOFEntry(int row, int col)
 */
 void SettingsDlg::saveCurrentCOF(int row, int col)
 {
-  currCOFVal = dlgUI->staticFrictionTable->text(row, col).toDouble();
+    QTableWidgetItem *staticFrictionItem;
+    staticFrictionItem = dlgUI->staticFrictionTable->item(row, col);
+    currCOFVal = staticFrictionItem->text().toDouble();
 }
 
 /*!
@@ -149,7 +161,10 @@ void SettingsDlg::saveCurrentCOF(int row, int col)
 */
 void SettingsDlg::saveCurrentKCOF(int row, int col)
 {
-  currKCOFVal = dlgUI->kineticFrictionTable->text(row, col).toDouble();
+    QTableWidgetItem *kineticFrictionItem;
+    kineticFrictionItem = dlgUI->kineticFrictionTable->item(row, col);
+
+    currKCOFVal = kineticFrictionItem->text().toDouble();
 }
 
 
@@ -160,22 +175,29 @@ void SettingsDlg::saveCurrentKCOF(int row, int col)
   If the user changes a material name, the name is updated in the other table
   as well.
 */
+
+/* THIS FUNCTION MUST BE REVIEWED
+ */
 void SettingsDlg::checkKCOFEntry(int row, int col)
 {
   double val;
   bool ok;
+
+  QTableWidgetItem *tableItem;
   if (row > 0 && col > 0) {
-    val = dlgUI->kineticFrictionTable->text(row, col).toDouble(&ok);
+    tableItem = dlgUI->kineticFrictionTable->item(row, col);
+    val = tableItem->text().toDouble(&ok);
     if (!ok || val < 0) {
-      dlgUI->kineticFrictionTable->setText(row, col, QString::number(currKCOFVal));
+
+      //dlgUI->kineticFrictionTable->setText(row, col, QString::number(currKCOFVal));
       return;
     }
   }
   else {
-    dlgUI->staticFrictionTable->setText(row, col, dlgUI->kineticFrictionTable->text(row, col));
-    dlgUI->staticFrictionTable->setText(col, row, dlgUI->kineticFrictionTable->text(row, col));
+    //dlgUI->staticFrictionTable->setText(row, col, dlgUI->kineticFrictionTable->text(row, col));
+    //dlgUI->staticFrictionTable->setText(col, row, dlgUI->kineticFrictionTable->text(row, col));
   }
-  dlgUI->kineticFrictionTable->setText(col, row, dlgUI->kineticFrictionTable->text(row, col));
+  //dlgUI->kineticFrictionTable->setText(col, row, dlgUI->kineticFrictionTable->text(row, col));
 }
 
 
