@@ -50,9 +50,10 @@ class GraspItApp : public QApplication
     GraspItApp(int &argc, char **argv) : QApplication(argc, argv), splash_enabled_(true)
     {
       //for db_dispatch jobs, splash is disabled
-      if (argc > 1 && !strcmp(argv[1], "db_dispatch")) {
-        splash_enabled_ = false;
-      }
+      if (argc > 1){
+          if(!strcmp(argv[1], "db_dispatch")) {
+                splash_enabled_ = false;
+      }}
     }
 
     /*! Returns the name of this class. */
