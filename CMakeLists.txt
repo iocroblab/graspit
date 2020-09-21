@@ -68,6 +68,7 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeMacros/")
 
+find_package(Threads QUIET)
 find_package(Qhull REQUIRED)
 find_package( SoQt REQUIRED CONFIG)
 if( SoQt_FOUND )
@@ -886,6 +887,7 @@ set(GRASPIT_LINK_LIBRARIES
    ${QP_LIBRARIES}
    ${GUROBI_LIBRARIES}
    ${GUROBI_CPP_LIBRARIES}
+   ${CMAKE_THREAD_LIBS_INIT}
 )
 
 ## Link the shared library and the executable
