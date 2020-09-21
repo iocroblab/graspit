@@ -69,8 +69,9 @@ void *run_test(void *ptr )
 
 TEST(TEST_PLANNER, TEST_VALID_GRASP_FOUND) {
   int argc = 0;
-  GraspItApp app(argc, NULL);
-  GraspitCore core(argc, NULL);
+  char **argv;
+  GraspItApp app(argc, argv);
+  GraspitCore core(argc, argv);
 
   //app.setMainWidget(core.getMainWindow()->mWindow);
 
@@ -113,8 +114,8 @@ TEST(TEST_PLANNER, TEST_VALID_GRASP_FOUND) {
 
 int main(int argc, char **argv)
 {
-  GraspItApp app(argc, NULL);
-  GraspitCore core(argc, NULL);
+  GraspItApp app(argc, argv);
+  GraspitCore core(argc, argv);
 
   //app.setMainWidget(core.getMainWindow()->mWindow);
 
