@@ -72,7 +72,7 @@ TEST(TEST_PLANNER, TEST_VALID_GRASP_FOUND) {
   GraspItApp app(argc, NULL);
   GraspitCore core(argc, NULL);
 
-  app.setMainWidget(core.getMainWindow()->mWindow);
+  //app.setMainWidget(core.getMainWindow()->mWindow);
 
   QString fileName = QString(QString(getenv("GRASPIT"))+QString("/worlds/") + QString("plannerMug.xml"));
 
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
   GraspItApp app(argc, NULL);
   GraspitCore core(argc, NULL);
 
-  app.setMainWidget(core.getMainWindow()->mWindow);
+  //app.setMainWidget(core.getMainWindow()->mWindow);
 
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
