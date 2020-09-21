@@ -140,8 +140,8 @@ TEST(TEST_COLLISION, TEST_GET_BOUNDING_VOLUMES) {
 
 int main(int argc, char **argv)
 {
-  GraspItApp app(argc, NULL);
-  GraspitCore core(argc, NULL);
+  GraspItApp app(argc, argv);
+  GraspitCore core(argc, argv);
 
   //app.setMainWidget(core.getMainWindow()->mWindow);
 
