@@ -11,7 +11,7 @@
 #include "ivmgr.h"
 #include "world.h"
 #include "plannerdlg.h"
-#include "quality.h"
+#include "quality/quality.h"
 #include "robot.h"
 #include "qmDlg.h"
 #include "grasp.h"
